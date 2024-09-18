@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
 function Card({ title, children }) {
   return (
@@ -11,6 +12,11 @@ function Card({ title, children }) {
     </div>
   );
 }
+
+Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
 function UserCard({ user, onAction, actionText }) {
   return (
@@ -26,6 +32,15 @@ function UserCard({ user, onAction, actionText }) {
   );
 }
 
+UserCard.propTypes = {
+  user: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+  }).isRequired,
+  onAction: PropTypes.func.isRequired,
+  actionText: PropTypes.string.isRequired,
+};
+
 function Home() {
   const [users, setUsers] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -39,11 +54,12 @@ function Home() {
     if (!token) {
       navigate('/login');
     } else {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       fetchFriends();
       fetchFriendRequests();
       fetchRecommendations();
     }
-  }, []);
+  }, [navigate]);
 
   const fetchFriends = async () => {
     try {
@@ -83,11 +99,7 @@ function Home() {
       });
       toast.success('Request sent');
     } catch (error) {
-      if (error.response?.data?.message === 'Friend request already sent') {
-        toast.error('Already sent');
-      } else {
-        toast.error('Failed to send request');
-      }
+      toast.error('Failed to send request');
     }
   };
 
@@ -161,7 +173,7 @@ function Home() {
             onChange={handleSearch}
             className="w-full p-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white"
           />
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-thin">
             {users.map(user => (
               <UserCard
                 key={user._id}
@@ -173,7 +185,7 @@ function Home() {
           </div>
         </Card>
         <Card title="Friend Requests">
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-thin">
             {friendRequests.map(request => (
               <div key={request._id} className="flex justify-between items-center p-3 hover:bg-gray-700 rounded-lg transition duration-300">
                 <span className="font-medium">{request.username}</span>
@@ -198,7 +210,7 @@ function Home() {
       </div>
       <div>
         <Card title="Friends">
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-thin">
             {friends.map(friend => (
               <UserCard
                 key={friend._id}
@@ -210,7 +222,7 @@ function Home() {
           </div>
         </Card>
         <Card title="Recommended Friends">
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-thin">
             {recommendations.map(recommendation => (
               <UserCard
                 key={recommendation._id}

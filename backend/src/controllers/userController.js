@@ -11,14 +11,6 @@ exports.searchUsers = async (req, res) => {
 };
 
 exports.sendFriendRequest = async (req, res) => {
-  console.log('Received request:', {
-    body: req.body,
-    params: req.params,
-    query: req.query,
-    headers: req.headers,
-    userId: req.userId
-  });
-  
   try {
     const { friendId } = req.body;
     console.log('Received friend request:', { userId: req.userId, friendId });
@@ -26,6 +18,11 @@ exports.sendFriendRequest = async (req, res) => {
     if (!req.userId) {
       console.log('User ID not found in request');
       return res.status(401).json({ message: 'Authentication failed' });
+    }
+
+    if (!friendId) {
+      console.log('Friend ID not provided');
+      return res.status(400).json({ message: 'Friend ID is required' });
     }
 
     const user = await User.findById(req.userId);

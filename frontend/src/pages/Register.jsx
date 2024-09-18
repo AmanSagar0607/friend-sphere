@@ -11,11 +11,14 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/auth/register', { username, password });
-      toast.success('Registration successful! Please log in.');
-      navigate('/login');
+      const response = await axios.post('/api/auth/register', { username, password });
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      toast.success('Registered successfully');
+      navigate('/');
     } catch (error) {
-      toast.error('Registration failed: ' + (error.response?.data?.message || error.message));
+      toast.error('Registration failed');
     }
   };
 

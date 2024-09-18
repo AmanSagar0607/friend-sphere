@@ -12,11 +12,13 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post('/api/auth/login', { username, password });
-      localStorage.setItem('token', response.data.token);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       navigate('/');
-      toast.success('Logged in successfully');
+      toast.success('Logged in');
     } catch (error) {
-      toast.error('Login failed: ' + (error.response?.data?.message || error.message));
+      toast.error('Login failed');
     }
   };
 

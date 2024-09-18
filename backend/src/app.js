@@ -17,13 +17,14 @@ app.use(express.json());
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 30s
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  family: 4 // Use IPv4, skip trying IPv6
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch((err) => {
   console.error('MongoDB connection error:', err);
-  console.error('MongoDB URI:', process.env.MONGODB_URI);
-  process.exit(1); // Exit the process with failure
+  process.exit(1);
 });
 
 const db = mongoose.connection;

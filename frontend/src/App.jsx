@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -10,6 +11,7 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
     navigate('/login');
   };
 
@@ -31,6 +33,13 @@ function Navbar() {
 }
 
 function App() {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }, []);
+
   return (
     <Router>
       <div className="min-h-screen bg-gray-900 text-gray-100">
