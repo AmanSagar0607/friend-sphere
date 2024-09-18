@@ -67,8 +67,8 @@ function Home() {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setFriends(response.data);
-    } catch (error) {
-      console.error('Error fetching friends:', error);
+    } catch {
+      console.error('Error fetching friends');
     }
   };
 
@@ -78,8 +78,8 @@ function Home() {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUsers(response.data);
-    } catch (error) {
-      console.error('Error searching users:', error);
+    } catch {
+      console.error('Error searching users');
     }
   };
 
@@ -98,7 +98,7 @@ function Home() {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       toast.success('Request sent');
-    } catch (error) {
+    } catch {
       toast.error('Failed to send request');
     }
   };
@@ -110,7 +110,7 @@ function Home() {
       });
       fetchFriends();
       toast.success('Friend removed');
-    } catch (error) {
+    } catch {
       toast.error('Failed to remove friend');
     }
   };
@@ -121,8 +121,8 @@ function Home() {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setFriendRequests(response.data);
-    } catch (error) {
-      console.error('Error fetching friend requests:', error);
+    } catch {
+      console.error('Error fetching friend requests');
     }
   };
 
@@ -132,8 +132,8 @@ function Home() {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setRecommendations(response.data);
-    } catch (error) {
-      console.error('Error fetching recommendations:', error);
+    } catch {
+      console.error('Error fetching recommendations');
     }
   };
 
@@ -145,7 +145,7 @@ function Home() {
       fetchFriendRequests();
       fetchFriends();
       toast.success('Request accepted');
-    } catch (error) {
+    } catch {
       toast.error('Failed to accept request');
     }
   };
@@ -157,7 +157,7 @@ function Home() {
       });
       fetchFriendRequests();
       toast.success('Request rejected');
-    } catch (error) {
+    } catch {
       toast.error('Failed to reject request');
     }
   };
